@@ -19,9 +19,15 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
   const formValidations = {
     image: {
       // TODO REQUIRED, LESS THAN 10 MB AND ACCEPTED FORMATS VALIDATIONS
+      required: 'Arquivo obrigatório',
+      validate: {
+        lessThan10MB: size => size <= 10 * 1000, // 10MB
+        acceptedFormats: type => type === /^image\/jpeg|png|gif/,
+      }
     },
     title: {
       // TODO REQUIRED, MIN AND MAX LENGTH VALIDATIONS
+      required: 'Título obrigatório',
     },
     description: {
       // TODO REQUIRED, MAX LENGTH VALIDATIONS
@@ -46,7 +52,10 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
   } = useForm();
   const { errors } = formState;
 
+  console.log(errors)
+
   const onSubmit = async (data: Record<string, unknown>): Promise<void> => {
+    console.log(data)
     try {
       // TODO SHOW ERROR TOAST IF IMAGE URL DOES NOT EXISTS
       // TODO EXECUTE ASYNC MUTATION
@@ -67,20 +76,28 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
           setLocalImageUrl={setLocalImageUrl}
           setError={setError}
           trigger={trigger}
+          name="image"
+          onChange={async () => false}
           // TODO SEND IMAGE ERRORS
+
           // TODO REGISTER IMAGE INPUT WITH VALIDATIONS
+          {...register("image", formValidations.image)}
         />
 
         <TextInput
           placeholder="Título da imagem..."
+          name="title"
           // TODO SEND TITLE ERRORS
           // TODO REGISTER TITLE INPUT WITH VALIDATIONS
+          {...register("title", formValidations.title)}
         />
 
         <TextInput
           placeholder="Descrição da imagem..."
+          name="description"
           // TODO SEND DESCRIPTION ERRORS
           // TODO REGISTER DESCRIPTION INPUT WITH VALIDATIONS
+          {...register("description", formValidations.description)}
         />
       </Stack>
 
