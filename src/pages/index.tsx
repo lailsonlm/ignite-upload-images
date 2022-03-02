@@ -16,21 +16,21 @@ type ImagesList = {
     url: string;
     ts: number;
     id: string;
-  }[]
-}
+  }[];
+};
 
 export default function Home(): JSX.Element {
   
   async function fetchImages({ pageParam = null }): Promise<ImagesList> {
-    const after = pageParam
+    const after = pageParam;
     const result = await api.get('/api/images', {
       params: {
         after,
-      }
-    })
+      },
+    });
     
-    return result.data
-  } 
+    return result.data;
+  }
 
   const {
     data,
@@ -48,19 +48,16 @@ export default function Home(): JSX.Element {
 
 
   const formattedData = useMemo(() => {
-    // TODO FORMAT AND FLAT DATA ARRAY
-    const result = data?.pages.map(res => res.data).flat(2)
+    const result = data?.pages.map(res => res.data).flat(2);
 
-    return result
+    return result;
   }, [data]);
 
 
-  // TODO RENDER LOADING SCREEN
   if(isLoading) {
     return <Loading />
   }
 
-  // TODO RENDER ERROR SCREEN
   if(isError) {
     return <Error />
   }
